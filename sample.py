@@ -4,6 +4,7 @@ from matplotlib import image
 
 from matplotlib import pyplot
 from source.conversion import rgb_to_gray
+from source.edge_detection import edge
 from source.points import *
 from source.geometrical import *
 from source.filters import *
@@ -81,5 +82,6 @@ gray=rgb_to_gray(img)
 
 
 
-img_filtered=meanfilt(gray,(3,3))
+img_filtered=edge(gray)
 show_img_effect_gray(gray,img_filtered)
+print(np.unique(img_filtered))

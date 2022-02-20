@@ -70,7 +70,7 @@ def normalize_image(image):
     return np.clip(image, 0,255)
 
 
-def binarize_image(image,  threshold, btype="lower", threshold2=None):
+def binarize_image(image,  threshold, btype="lower", threshold2=None, middle_value=None):
     check_dimension(image,2)
 
     #TODO check threshold
@@ -91,7 +91,12 @@ def binarize_image(image,  threshold, btype="lower", threshold2=None):
         #check threshold2
         upper_id= image> threshold2 
         lower_id=image< threshold 
-        middle_id= np.argwhere(image<threshold2 and image> threshold)
+   
+
+        if middle_value is not None:
+            middle_id= np.argwhere((image<threshold2) & (image> threshold))
+            image[middle_id]=middle_value
+
         image[upper_id]=255
         image[lower_id]=0
 

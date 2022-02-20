@@ -1,6 +1,23 @@
+from cmath import pi
 import numpy as np
 from pyparsing import col
 from .utils import check_2D, check_dimension
+
+def _calc_gaussian_value(i,j,sigma,half_size):
+    return 1/(2*np.pi * sigma**2)* np.exp( -1* ( ( i-(half_size+1) )**2 + (j-(half_size+1))**2  ) /(2*sigma**2)  )
+
+def create_gaussian_filter(size,sigma):
+    if(size%2 ==0):
+        raise ValueError()
+
+    filter= np.zeros((size,size))
+    half_size=size//2
+
+    for i in range(size):
+        for j in range(size):
+            filter[i][j]= _calc_gaussian_value(i,j,sigma,half_size)
+    return filter
+
 
 def is_in_edge_range(image_shape, coords, filter_size):
     y,x= coords
