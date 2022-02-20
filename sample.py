@@ -5,14 +5,14 @@ from matplotlib import image
 from matplotlib import pyplot
 from source.conversion import rgb_to_gray
 from source.points import *
-
-
+from source.geometrical import *
+from source.filters import *
+import source.built_in_filters as filters
 def show_img_effect(before,after, cmap_before=None,cmap_after=None, diff=False):
 
     if diff:
         fig,(ax1,ax2,ax3)=pyplot.subplots(1,3)
     else:
-
         fig,(ax1,ax2)=pyplot.subplots(1,2)
 
 
@@ -31,6 +31,7 @@ def show_img_effect_gray(before,after, diff=False):
 img = image.imread("./resources/sample_images/lena_color.tiff")
 
 
+
 gray=rgb_to_gray(img)
 
 # show_img_effect(img,gray,cmap_after='gray')
@@ -47,8 +48,38 @@ gray=rgb_to_gray(img)
 
 # show_img_effect_gray(gray,gamma1,True)
 # show_img_effect_gray(gray,gamma2,True)
-bin=binarize_image(gray,120)
+# bin=binarize_image(gray,120)
 
-show_img_effect_gray(gray,bin)
-bin=binarize_image(gray,120, btype='upper')
-show_img_effect_gray(gray,bin)
+# show_img_effect_gray(gray,bin)
+# bin=binarize_image(gray,120, btype='upper')
+# show_img_effect_gray(gray,bin)
+
+
+
+# padded=padd_image(gray,-100)
+# show_img_effect_gray(gray,padded)
+
+# padded=padd_image(gray,(100,100))
+# show_img_effect_gray(gray,padded)
+
+
+
+
+# img_filtered=filter_image(gray,filters.blur_box)
+# show_img_effect_gray(gray,img_filtered)
+
+# img_filtered=filter_image(gray,filters.blur_gaussian)
+# show_img_effect_gray(gray,img_filtered)
+
+
+# img_filtered=filter_image(gray,filters.sharpen)
+# show_img_effect_gray(gray,img_filtered)
+
+
+# img_filtered=filter_image(gray,filters.sobel_vertical)
+# show_img_effect_gray(gray,img_filtered)
+
+
+
+img_filtered=meanfilt(gray,(3,3))
+show_img_effect_gray(gray,img_filtered)

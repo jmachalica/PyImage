@@ -16,6 +16,9 @@ def check_dimension(array,ndim):
         raise ValueError()
 
 
+def check_2D(array):
+    return check_dimension(array,2)
+
 def check_dtype(dtype):
     if dtype not in VALID_DTYPES:
         return False
