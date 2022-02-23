@@ -35,7 +35,6 @@ def convert_dtype(image, new_dtype):
     if check_dtype(new_dtype):
         return image.astype(new_dtype)
 
-
     else:
         raise ValueError()
     

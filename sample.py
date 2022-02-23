@@ -1,4 +1,3 @@
-from cgitb import grey
 import numpy as np
 from matplotlib import image
 
@@ -9,6 +8,7 @@ from source.points import *
 from source.geometrical import *
 from source.filters import *
 import source.built_in_filters as filters
+from source.morphological import dilation, erosion, opening,closing
 def show_img_effect(before,after, cmap_before=None,cmap_after=None, diff=False):
 
     if diff:
@@ -82,6 +82,8 @@ gray=rgb_to_gray(img)
 
 
 
-img_filtered=edge(gray)
+# img_filtered=edge(gray)
+# show_img_effect_gray(gray,img_filtered)
+
+img_filtered=closing(gray,size=(3,3))
 show_img_effect_gray(gray,img_filtered)
-print(np.unique(img_filtered))

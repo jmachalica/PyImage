@@ -12,7 +12,7 @@ from .built_in_filters import sobel_horizontal, sobel_vertical
 #     Apply double threshold to determine potential edges
 #     Track edge by hysteresis: Finalize the detection of edges by suppressing all the other edges that are weak and not connected to strong edges.
 
-# Edges correspond to a change of pixels’ intensity. To detect it, the easiest way is to apply filters that highlight this intensity change in both directions: horizontal (x) and vertical (y)
+# Edges correspond to a change of pixels’ intensity. To detect it, the easiest way is to apply filters that highlight this intensity change in both directions: horizontal (x) and vertical (y) 
 
 
 def get_neighbors_in_direction(image,i,j,direction):
