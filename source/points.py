@@ -108,7 +108,6 @@ def negate_binary(image):
     check_2D(image)
     cp=image.copy()
     indexes=image==0
-
     cp[indexes]=255
     cp[~indexes]=0
     return cp

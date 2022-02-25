@@ -139,15 +139,13 @@ def structure_fit(structure,image_slice, background_level):
     stacked=np.column_stack((structure,image_slice))
 
     for struct_el,img_el in stacked:
-        if struct_el == np.nan:
+
+        if np.isnan(struct_el):
             continue
-        elif struct_el ==1:
-            if (struct_el > background_level) != (img_el>background_level):
-                return False
-        else:
-            if (struct_el < background_level) != (img_el<background_level):
-                return False
-         
+
+        elif (struct_el==1) != (img_el>background_level):
+            return False
+
         
     return True
         
@@ -174,18 +172,21 @@ def prune(image,structure,rotate,origin, iterations=None,stop=False,padding_mode
     for i in range(iterations):
 
         curr_image=previous.copy()
+        print(i)
 
         for row_i in range(d_row_n,row_n-d_row_p):
             for col_i in range(d_col_n,col_n-d_col_p):
          
 
-                image_slice= curr_image[row_i- d_row_n:row_i+d_row_p+1 , col_i-d_col_n: col_i+d_col_p+1]
+                image_slice= previous[row_i- d_row_n:row_i+d_row_p+1 , col_i-d_col_n: col_i+d_col_p+1]
                 
                 if background==None:
-                    background=np.mean(previous)
-
+                    background=np.mean(curr_image)
+                    print(background)
+         
+                  
                 if structure_fit(structure, image_slice,background):
-            
+    
                     curr_image[row_i][col_i]=0
 
                     
@@ -198,6 +199,7 @@ def prune(image,structure,rotate,origin, iterations=None,stop=False,padding_mode
             
         if rotate:
             structure=rotate_image(structure,90)
-
+            
+        previous=curr_image
     
     return clip_to_uint(curr_image)
