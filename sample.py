@@ -8,7 +8,8 @@ from source.points import *
 from source.geometrical import *
 from source.filters import *
 import source.built_in_filters as filters
-from source.morphological import dilation, erosion, opening,closing
+from source.morphological import dilation, erosion, find_extrema, opening,closing, prune
+
 def show_img_effect(before,after, cmap_before=None,cmap_after=None, diff=False):
 
     if diff:
@@ -29,11 +30,13 @@ def show_img_effect_gray(before,after, diff=False):
     show_img_effect(before,after,cmap_before='gray',cmap_after='gray',diff=diff)
 
 
-img = image.imread("./resources/sample_images/lena_color.tiff")
-
-
-
-gray=rgb_to_gray(img)
+img = image.imread("./resources/sample_images/binary_shapes.jpg")
+img=rgb_to_gray(img)
+img=binarize_image(img, 40)
+# pyplot.imshow(img,cmap='gray')
+# pyplot.show()
+# print(np.unique(img))
+# gray=rgb_to_gray(img)
 
 # show_img_effect(img,gray,cmap_after='gray')
 
@@ -84,6 +87,9 @@ gray=rgb_to_gray(img)
 
 # img_filtered=edge(gray)
 # show_img_effect_gray(gray,img_filtered)
+structure= np.ones((3,3)) 
+structure[1][1]=np.nan
 
-img_filtered=closing(gray,size=(3,3))
-show_img_effect_gray(gray,img_filtered)
+
+img_filtered=prune(img, structure,False,(1,1),1)
+show_img_effect_gray(img,img_filtered)

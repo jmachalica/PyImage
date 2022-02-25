@@ -4,12 +4,10 @@ import numpy as np
 from .utils import check_dimension, check_dtype, convert_dtype
 
 
-def rotate(image, angle):
+def rotate_image(image, angle):
     pass
 
 def _padd_column(image,size):
-
-
 
     curr_shape=image.shape
     padding=np.zeros((curr_shape[0], abs(size)))

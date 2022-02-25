@@ -1,5 +1,5 @@
 import numpy as np
-from .utils import check_dimension, check_dtype, convert_dtype
+from .utils import check_2D, check_dimension, check_dtype, convert_dtype
 
 
 def check_number(value):
@@ -104,3 +104,11 @@ def binarize_image(image,  threshold, btype="lower", threshold2=None, middle_val
 
         
 
+def negate_binary(image):
+    check_2D(image)
+    cp=image.copy()
+    indexes=image==0
+
+    cp[indexes]=255
+    cp[~indexes]=0
+    return cp
