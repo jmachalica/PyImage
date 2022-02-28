@@ -99,22 +99,10 @@ def _padd_row(image,size):
 
 
 
-def padd_image(image, size):
+def padd_image(image, row=(0,0),col=(0,0),padd_mode='reflect'):
     check_dimension(image, 2)
-    new_image=np.copy(image)
-    curr_size = image.shape
-   
-    if isinstance(size, int):
-        new_image=_padd_row(new_image,size)
+    return  np.pad(image, row,
+                    col, mode=padd_mode)
 
-    elif isinstance(size, tuple):
-        if len(size)==2:
-            new_image=_padd_column(new_image,size[1])
-            new_image=_padd_row(new_image,size[0])
-
-        else:
-            raise ValueError()
-    else:
-        raise ValueError
     
-    return new_image
+
