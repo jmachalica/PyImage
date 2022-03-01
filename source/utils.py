@@ -5,15 +5,11 @@ VALID_DTYPES= (np.uint8, np.float64)
 
 def check_dimension(array,ndim):
 
+    if not isinstance(array,np.ndarray):
+        raise TypeError("Passed array is not a numpy ndarray")
 
-    array=np.asanyarray(array)
-
-    if isinstance(ndim,int):
-        ndim=[ndim]
-    if array.size == 0:
-        raise ValueError()
-    if array.ndim not in ndim:
-        raise ValueError()
+    if array.ndim != ndim:
+        raise ValueError("Array ndim: {array.ndim} isn't equal to {ndim}")
 
 
 def check_2D(array):
@@ -36,7 +32,7 @@ def convert_dtype(image, new_dtype):
         return image.astype(new_dtype)
 
     else:
-        raise ValueError()
+        raise ValueError("Invalid new dtype")
     
  
 def clip_to_uint(array):

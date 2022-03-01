@@ -73,9 +73,11 @@ def binarize_image(image,  threshold, btype="lower", threshold2=None, middle_val
     check_dimension(image,2)
 
     #TODO check threshold
+
+    check_number(threshold)
     image=np.copy(image)
     if btype not in ["lower","upper","both","histeresis"]:
-        raise ValueError()
+        raise ValueError("Invalid btype passed to binarize_image")
 
     if btype == "lower":
         upper_id= image>threshold

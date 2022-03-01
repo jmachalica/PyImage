@@ -5,11 +5,6 @@ from source import points
 import numpy as np
 class TestPoints(unittest.TestCase):
 
-    def test_monthly_schedule(self):
-        with patch() as mocked_get:
-            mocked_get.return_value.ok=True
-
-
 
     def setUp(self) -> None:
         super().setUp()
@@ -95,6 +90,99 @@ class TestPoints(unittest.TestCase):
         
         result=points.gamma_correction(image,1/2)
         self.assertEqual( (result == 1).all(), True )
+
+        image=self.img*255
+        result=points.gamma_correction(image,1/2)
+        self.assertEqual( (result == 15).all(), True )
+
+    def test_binarize_image_exceptions(self): 
+       
+        image=self.img.copy()
+        image[:,:]=128
+
+
+        # check valid
+        valid= ["lower","upper","both","histeresis"]
+        for method in valid:
+            try: 
+                points.binarize_image(image,10 , btype = method)
+            except ValueError:
+                self.fail(f"Exception raised on valid method {method}")
+        
+        try: 
+            points.binarize_image(image,20.7 , btype = method)
+        except ValueError:
+            self.fail(f"Exception raised on valid threshold")
+        
+
+        with self.assertRaises(ValueError) as context:
+            points.binarize_image(image,None)
+            
+        self.assertTrue('Value is not a number' in str(context.exception))
+
+
+        with self.assertRaises(ValueError) as context:
+            points.binarize_image(image,'a')
+            
+        self.assertTrue('Value is not a number' in str(context.exception))
+        
+    
+
+
+    def test_binarize_image_lower(self):
+        image=self.img.copy()
+        image[:,:]=128
+
+       
+        result=points.binarize_image(image,129)
+        self.assertTrue( (result==0).all())
+       
+        result=points.binarize_image(image,128)
+        self.assertTrue( (result==0).all())
+
+        result=points.binarize_image(image,127)
+        self.assertTrue( (result==1).all())
+
+
+        image[:5,:5]=128
+        result=points.binarize_image(image,129)
+        self.assertEqual( np.count_nonzero(result !=0 ), 0)
+
+        image[:5,:5]=128
+        result=points.binarize_image(image,128)
+        self.assertEqual( np.count_nonzero(result !=0 ), 100)
+
+        image[:5,:5]=128
+        result=points.binarize_image(image,127)
+        self.assertEqual( np.count_nonzero(result !=0 ), 25)
+
+    def test_binarize_image_upper(self):
+        image=self.img.copy()
+        image[:,:]=128
+
+       
+        result=points.binarize_image(image,129, btype='upper')
+        self.assertTrue( (result==0).all())
+       
+        result=points.binarize_image(image,128)
+        self.assertTrue( (result==0).all())
+
+        result=points.binarize_image(image,127)
+        self.assertTrue( (result==1).all())
+
+
+        image[:5,:5]=128
+        result=points.binarize_image(image,129)
+        self.assertEqual( np.count_nonzero(result !=0 ), 0)
+
+        image[:5,:5]=128
+        result=points.binarize_image(image,128)
+        self.assertEqual( np.count_nonzero(result !=0 ), 100)
+
+        image[:5,:5]=128
+        result=points.binarize_image(image,127)
+        self.assertEqual( np.count_nonzero(result !=0 ), 25)
+
 
 
 
