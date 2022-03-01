@@ -13,5 +13,8 @@ previtt_vertical=np.tile (np.array([1, 0, -1]), (3,1) )
 sobel_horizontal=  np.array([[1, 2, 1], [0, 0, 0],[-1,-2,-1]])
 sobel_vertical=  np.array([[1, 0, -1], [2, 0, -2],[1,0,-1]])
 
+
+skeleton= np. array([[np.nan,0,np.nan],[np.nan, 1,np.nan],np.ones(3) ])
+
 #  np.array([[-1, -1, -1], [-1, 8, -1],[-1,-1,-1]])
 #  np.array([[-1, -1, -1], [-1, 8, -1],[-1,-1,-1]])

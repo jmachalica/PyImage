@@ -15,35 +15,50 @@ def _check_origin_range(origin, structure_shape):
             raise ValueError()
 
 
-def _min_max_filter(image, structure, origin, min):
+def calc_padding(structure, origin):
 
     d_row_p = structure.shape[0]-origin[0]-1
     d_row_n = structure.shape[0] - d_row_p - 1
     d_col_p = structure.shape[1]-origin[1]-1
     d_col_n = structure.shape[1] - d_col_p-1
 
-    padded = np.pad(image, ((d_row_n, d_row_p),
-                    (d_col_n, d_col_p)), mode='reflect')
-    padded = padded.astype('float32')
+    return (d_row_p, d_row_n, d_col_p, d_col_n)
 
+def padd_image_to_structure(image,structure,origin,padding_mode='reflect',padding=False):
+    d_row_p, d_row_n, d_col_n, d_col_p = calc_padding(structure, origin)
+    if padding:
+
+        return padd_image(image, ((d_row_n, d_row_p),
+                        (d_col_n, d_col_p)), mode=padding_mode), (d_row_p, d_row_n, d_col_n, d_col_p)
+    else:
+        return padd_image(image, ((d_row_n, d_row_p),
+                        (d_col_n, d_col_p)), mode=padding_mode)
+
+
+def _min_max_filter(image, structure, origin,function):
+
+    padded, padding=padd_image_to_structure(image,structure[0],origin,padding=True)
+
+    padded = padded.astype('float32')
     filtered = np.zeros(image.shape, dtype='float32')
 
     row_n = padded.shape[0]
     col_n = padded.shape[1]
 
-    for row_i in range(d_row_n, row_n-d_row_p):
-        for col_i in range(d_col_n, col_n-d_col_p):
 
-            image_curr = padded[row_i - d_row_n:row_i +
-                                d_row_p+1, col_i-d_col_n: col_i+d_col_p+1]
+
+    for row_i in range(padding[0], row_n-padding[1]):
+        for col_i in range(padding[2], col_n-padding[3]):
+
+            image_slice = padded[row_i - padding[0]:row_i +
+                                padding[1]+1, col_i-padding[2]: col_i+padding[3]+1]
 
             if min:
                 function = np.min
             else:
                 function = np.max
 
-            filtered[row_i - d_row_n, col_i -
-                     d_col_n] = function(image_curr-structure)
+            filtered[row_i - padding[0],col_i-padding[2]]= function(image_slice-structure)
 
     return clip_to_uint(filtered)
 
@@ -74,12 +89,12 @@ def validate_morphological(func):
     return wrapper
 
 
-def _erosion(image, size, structure, origin):
+def _erosion(image,structure, origin):
 
     return _min_max_filter(image, structure, origin, min=True)
 
 
-def _dilation(image, size, structure, origin):
+def _dilation(image,  structure, origin):
 
     return _min_max_filter(image, structure, origin, min=False)
 
@@ -118,16 +133,6 @@ def find_extrema(image, threshold, min=True, size=None, structure=None, origin=N
     return binarize_image(transformed, threshold, btype="lower")
 
 
-def calc_padding(structure, origin):
-    row, col = structure.shape
-    row_origin, col_orogin = origin
-
-    d_row_p = structure.shape[0]-origin[0]-1
-    d_row_n = structure.shape[0] - d_row_p - 1
-    d_col_p = structure.shape[1]-origin[1]-1
-    d_col_n = structure.shape[1] - d_col_p-1
-
-    return (d_row_p, d_row_n, d_col_p, d_col_n)
 
 
 def structure_fit(structure, image_slice, background_level):
@@ -165,15 +170,6 @@ def _convert_to_list(object):
     except TypeError:
         return [object]
 
-def padd_image_to_structure(image,structure,origin,padding_mode,padding=False):
-    d_row_p, d_row_n, d_col_n, d_col_p = calc_padding(structure, origin)
-    if padding:
-
-        return padd_image(image, ((d_row_n, d_row_p),
-                        (d_col_n, d_col_p)), mode=padding_mode), (d_row_p, d_row_n, d_col_n, d_col_p)
-    else:
-        return padd_image(image, ((d_row_n, d_row_p),
-                        (d_col_n, d_col_p)), mode=padding_mode)
 
 def prune(image, structures, rotate, origin, iterations=1, stop=False, padding_mode='reflect', background=None):
 

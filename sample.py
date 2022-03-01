@@ -8,7 +8,7 @@ from source.points import *
 from source.geometrical import *
 from source.filters import *
 import source.built_in_filters as filters
-from source.morphological import dilation, erosion, find_extrema, opening,closing, prune
+from source.morphological import dilation, erosion, find_extrema, opening,closing, prune, skeleton
 
 def show_img_effect(before,after, cmap_before=None,cmap_after=None, diff=False):
 
@@ -87,9 +87,21 @@ img=binarize_image(img, 40)
 
 # img_filtered=edge(gray)
 # show_img_effect_gray(gray,img_filtered)
-structure= np.ones((3,3)) 
-structure[1][1]=np.nan
+# structure= np.ones((3,3)) 
+# structure[1][1]=np.nan
 
 
-img_filtered=prune(img, structure,False,(1,1),1)
-show_img_effect_gray(img,img_filtered)
+
+# structure=np.array(range(9))
+# structure=np.reshape(structure, (-1,3))
+# print("Before", structure)
+
+rotated=rotate_image(img,90 )
+print("After",rotated)
+show_img_effect_gray(img,rotated)
+# from  source.geometrical import _calc_rotation_point
+# for row in range(3):
+#     for col in range(3):
+#         print("Value for:", row," ",col)
+#         value=_calc_rotation_point(col,row,-90,center=(1,1))
+#         print(np.round(value), end="\n\n")

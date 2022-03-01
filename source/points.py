@@ -1,11 +1,11 @@
 import numpy as np
-from .utils import check_2D, check_dimension, check_dtype, convert_dtype
+from .utils import check_2D, check_dimension, check_dtype, convert_dtype, clip_to_uint
 
 
 def check_number(value):
 
     if not (isinstance(value, float) or isinstance(value,int) ):
-        raise ValueError()
+        raise ValueError("Value is not a number")
 
 
 def validate(image,value):
@@ -26,9 +26,9 @@ def add(image, value):
     validate(image,value)
     image=np.copy(image)
     image=image.astype('float')
-    image+=value
-    image=np.clip(image,0,255)
-    return image.astype('uint8')
+    image+=value    
+    return clip_to_uint(image)
+
 
     
     
@@ -38,9 +38,7 @@ def image_multiply(image,value):
     image=np.copy(image)
     image=image.astype('float')
     image*=value
-    image=np.clip(image,0,255)
-    return image.astype('uint8')
-
+    return clip_to_uint(image)
 
 
 
@@ -48,16 +46,17 @@ def image_multiply(image,value):
 
 def substract_images(image1, image2):
     if not image1.shape == image2.shape:
-        raise ValueError()
+        raise ValueError("Images have different shape")
+
     image1=image1.astype('float')
     image2=image2.astype('float')
 
-    return np.clip(image1 - image2, 0,255)
+    return clip_to_uint(image1-image2)
 
 
 def gamma_correction(img,gamma):
     image=np.copy(image)
-    return img**gamma
+    return clip_to_uint(img**gamma)
 
 
 def normalize_image(image):
