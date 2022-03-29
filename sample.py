@@ -33,75 +33,7 @@ def show_img_effect_gray(before,after, diff=False):
 img = image.imread("./resources/sample_images/binary_shapes.jpg")
 img=rgb_to_gray(img)
 img=binarize_image(img, 40)
-# pyplot.imshow(img,cmap='gray')
-# pyplot.show()
-# print(np.unique(img))
-# gray=rgb_to_gray(img)
-
-# show_img_effect(img,gray,cmap_after='gray')
-
-# img=add(gray, -200)
-# show_img_effect_gray(gray,img)
-
-# img=image_multiply(gray,2)
-# print(img)
-# show_img_effect_gray(gray,img,diff=True)
-
-# gamma1=gamma_correction(gray,2)
-# gamma2=gamma_correction(gray,0.25)
-
-# show_img_effect_gray(gray,gamma1,True)
-# show_img_effect_gray(gray,gamma2,True)
-# bin=binarize_image(gray,120)
-
-# show_img_effect_gray(gray,bin)
-# bin=binarize_image(gray,120, btype='upper')
-# show_img_effect_gray(gray,bin)
-
-
-
-# padded=padd_image(gray,-100)
-# show_img_effect_gray(gray,padded)
-
-# padded=padd_image(gray,(100,100))
-# show_img_effect_gray(gray,padded)
-
-
-
-
-# img_filtered=filter_image(gray,filters.blur_box)
-# show_img_effect_gray(gray,img_filtered)
-
-# img_filtered=filter_image(gray,filters.blur_gaussian)
-# show_img_effect_gray(gray,img_filtered)
-
-
-# img_filtered=filter_image(gray,filters.sharpen)
-# show_img_effect_gray(gray,img_filtered)
-
-
-# img_filtered=filter_image(gray,filters.sobel_vertical)
-# show_img_effect_gray(gray,img_filtered)
-
-
-
-# img_filtered=edge(gray)
-# show_img_effect_gray(gray,img_filtered)
-# structure= np.ones((3,3)) 
-# structure[1][1]=np.nan
-
-
-
-# structure=np.array(range(9))
-# structure=np.reshape(structure, (-1,3))
-# print("Before", structure)
 
 rotated=rotate_image(img,90 )
-print("After",rotated)
 show_img_effect_gray(img,rotated)
-# from  source.geometrical import _calc_rotation_point
-# for row in range(3):
-#     for col in range(3):
-#         print("Value for:", row," ",col)
-#         value=_calc_rotation_point(col,row,-90,center=(1,1))
-#         print(np.round(value), end="\n\n")
+
